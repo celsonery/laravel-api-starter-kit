@@ -1,0 +1,209 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sindico-api
+  namespace: apps
+spec:
+  replicas: 1
+  minReadySeconds: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: sindico-api
+  template:
+    metadata:
+      labels:
+        app: sindico-api
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: sindico-api
+          image: registry.oregon.net.br/celsonery/sindico-api:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: APP_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: app_name
+            - name: APP_ENV
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: app_env
+            - name: APP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: app_key
+            - name: APP_DEBUG
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: app_debug
+            - name: APP_URL
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: app_url
+            - name: SANCTUM_STATEFUL_DOMAINS
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: sanctum_stateful_domains
+            - name: DB_CONNECTION
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: db_connection
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: db_host
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: db_port
+            - name: DB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: db_database
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: db_username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: db_password
+            - name: SESSION_DRIVER
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: session_driver
+            - name: QUEUE_CONNECTION
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: queue_connection
+            - name: REDIS_CLIENT
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: redis_client
+            - name: REDIS_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: redis_host
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: redis_password
+            - name: REDIS_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: redis_port
+            - name: MAIL_MAILER
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: mail_mailer
+            - name: MAIL_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: mail_host
+            - name: MAIL_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: mail_port
+            - name: MAIL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: mail_username
+            - name: MAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: mail_password
+            - name: MAIL_ENCRYPTION
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: mail_encryption
+            - name: MAIL_FROM_ADDRESS
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: mail_from_address
+            - name: MAIL_FROM_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: mail_from_name
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: aws_access_key_id
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: aws_secret_access_key
+            - name: AWS_DEFAULT_REGION
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: aws_default_region
+            - name: AWS_BUCKET
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: aws_bucket
+            - name: AWS_USE_PATH_STYLE_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: aws_use_path_style_endpoint
+          securityContext:
+            allowPrivilegeEscalation: false
+          resources:
+            requests:
+              memory: "12Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sindico-api
+  namespace: apps
+spec:
+  selector:
+    app: sindico-api
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+      #nodePort: 30501
+  type: NodePort

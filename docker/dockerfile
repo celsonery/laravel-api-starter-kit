@@ -1,0 +1,145 @@
+# Stage 1: Composer Build
+FROM composer:latest AS composer-build
+
+WORKDIR /app
+
+# Copiar composer files
+COPY composer.json composer.lock ./
+
+# Remove dev packages references
+RUN composer config --unset require-dev && \
+    composer config --unset scripts.post-autoload-dump 2>/dev/null || true
+
+# Composer install without dev dependencies
+RUN composer install \
+    --no-dev \
+    --no-scripts \
+    --no-interaction \
+    --prefer-dist \
+    --optimize-autoloader \
+    --no-cache \
+    && composer clear-cache
+
+# Copy application to image
+COPY . .
+
+# # Generate config cache
+# RUN php artisan config:cache --no-ansi 2>/dev/null || true && \
+#     php artisan route:cache --no-ansi 2>/dev/null || true && \
+#     php artisan view:cache --no-ansi 2>/dev/null || true
+
+# Dump autoload
+RUN composer dump-autoload \
+    --optimize \
+    --classmap-authoritative \
+    --no-scripts
+
+# Hard clean
+RUN find vendor \( \
+        -type d \( -name "test" -o -name "tests" -o -name "Tests" -o -name "docs" -o -name "doc" -o -name "examples" -o -name "example" -o -name "demo" -o -name ".git" -o -name ".github" \) \
+        -o -type f \( -name "*.md" -o -name "*.MD" -o -name "README*" -o -name "CHANGELOG*" -o -name "LICENSE*" -o -name "CONTRIBUTING*" -o -name ".git*" -o -name "phpunit.xml*" -o -name ".travis.yml" -o -name ".scrutinizer.yml" -o -name "composer.json" \) \
+    \) ! -path "vendor/composer/*" -exec rm -rf {} + 2>/dev/null || true && \
+    rm -rf /tmp/* /root/.composer
+
+
+# Stage 2: Build image - Alpine Linux [ PHP-Fpm & Nginx & Postgres support ]
+FROM php:8.4-fpm-alpine3.22
+
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
+# Optimized install
+RUN set -eux; \
+    apk add --no-cache --virtual .build-deps \
+        $PHPIZE_DEPS \
+        postgresql-dev \
+        libpng-dev \
+        libjpeg-turbo-dev \
+        freetype-dev \
+        libzip-dev \
+        oniguruma-dev \
+        icu-dev \
+    ; \
+    apk add --no-cache \
+        nginx \
+        supervisor \
+        postgresql-libs \
+        libpng \
+        libjpeg-turbo \
+        freetype \
+        libzip \
+        icu-libs \
+        oniguruma \
+    ; \
+    docker-php-ext-configure gd --with-freetype --with-jpeg; \
+    docker-php-ext-install -j$(nproc) \
+        pdo_pgsql \
+        pgsql \
+        mbstring \
+        exif \
+        pcntl \
+        bcmath \
+        gd \
+        zip \
+        intl \
+        opcache \
+    ; \
+    find /usr/local -type f -executable -exec strip --strip-all '{}' + 2>/dev/null || true; \
+    runDeps="$( \
+        scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \
+            | tr ',' '\n' \
+            | sort -u \
+            | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
+    )"; \
+    apk add --no-cache $runDeps; \
+    apk del --no-network .build-deps; \
+    rm -rf \
+        /tmp/* \
+        /var/cache/apk/* \
+        /usr/src/php* \
+        /usr/local/lib/php/test \
+        /usr/local/lib/php/doc \
+        /usr/local/include \
+        /usr/share/man \
+        /usr/share/doc \
+    ; \
+    find /usr/local/lib -name '*.a' -delete;
+
+# Copy config files
+COPY ./docker/php.ini /usr/local/etc/php/conf.d/custom.ini
+COPY ./docker/nginx.conf /etc/nginx/nginx.conf
+COPY ./docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+RUN mkdir -p /var/log/supervisor
+
+WORKDIR /var/www/html
+
+# Copy application files
+COPY --from=composer-build --chown=www-data:www-data /app/vendor ./vendor
+COPY --from=composer-build --chown=www-data:www-data /app/bootstrap ./bootstrap
+COPY --from=composer-build --chown=www-data:www-data /app/app ./app
+COPY --from=composer-build --chown=www-data:www-data /app/config ./config
+COPY --from=composer-build --chown=www-data:www-data /app/database ./database
+COPY --from=composer-build --chown=www-data:www-data /app/resources ./resources
+COPY --from=composer-build --chown=www-data:www-data /app/routes ./routes
+COPY --from=composer-build --chown=www-data:www-data /app/public ./public
+COPY --from=composer-build --chown=www-data:www-data /app/storage ./storage
+COPY --from=composer-build --chown=www-data:www-data /app/artisan ./artisan
+COPY --from=composer-build --chown=www-data:www-data /app/composer.json ./composer.json
+COPY --from=composer-build --chown=www-data:www-data /app/composer.lock ./composer.lock
+
+# Create dir and permissions
+RUN mkdir -p \
+        storage/app/public \
+        storage/framework/cache/data \
+        storage/framework/sessions \
+        storage/framework/testing \
+        storage/framework/views \
+        storage/logs \
+        bootstrap/cache \
+    && chmod -R 755 storage bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache \
+    && find . -type f \( -name "*.md" -o -name ".git*" -o -name "phpunit.xml*" \) -delete 2>/dev/null || true
+
+EXPOSE 80
+
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

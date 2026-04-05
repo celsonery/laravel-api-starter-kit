@@ -156,31 +156,6 @@ spec:
                 secretKeyRef:
                   name: secrets-sindico
                   key: mail_from_name
-            - name: AWS_ACCESS_KEY_ID
-              valueFrom:
-                secretKeyRef:
-                  name: secrets-sindico
-                  key: aws_access_key_id
-            - name: AWS_SECRET_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: secrets-sindico
-                  key: aws_secret_access_key
-            - name: AWS_DEFAULT_REGION
-              valueFrom:
-                secretKeyRef:
-                  name: secrets-sindico
-                  key: aws_default_region
-            - name: AWS_BUCKET
-              valueFrom:
-                secretKeyRef:
-                  name: secrets-sindico
-                  key: aws_bucket
-            - name: AWS_USE_PATH_STYLE_ENDPOINT
-              valueFrom:
-                secretKeyRef:
-                  name: secrets-sindico
-                  key: aws_use_path_style_endpoint
           securityContext:
             allowPrivilegeEscalation: false
           resources:

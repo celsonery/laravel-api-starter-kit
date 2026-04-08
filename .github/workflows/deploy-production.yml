@@ -35,6 +35,7 @@ jobs:
     name: Deploy to Kubernetes
     needs: build-and-push
     runs-on: ubuntu-latest
+    environment: productiom
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3

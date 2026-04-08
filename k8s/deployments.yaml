@@ -51,6 +51,16 @@ spec:
                 secretKeyRef:
                   name: secrets-sindico
                   key: app_url
+            - name: LOG_CHANNEL
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: log_channel
+            - name: LOG_LEVEL
+              valueFrom:
+                secretKeyRef:
+                  name: secrets-sindico
+                  key: log_level
             - name: SANCTUM_STATEFUL_DOMAINS
               valueFrom:
                 secretKeyRef:

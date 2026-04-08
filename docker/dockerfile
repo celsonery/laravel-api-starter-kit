@@ -119,7 +119,7 @@ COPY --from=composer-build --chown=www-data:www-data /app/bootstrap ./bootstrap
 COPY --from=composer-build --chown=www-data:www-data /app/app ./app
 COPY --from=composer-build --chown=www-data:www-data /app/config ./config
 COPY --from=composer-build --chown=www-data:www-data /app/database ./database
-COPY --from=composer-build --chown=www-data:www-data /app/resources ./resources
+#COPY --from=composer-build --chown=www-data:www-data /app/resources ./resources
 COPY --from=composer-build --chown=www-data:www-data /app/routes ./routes
 COPY --from=composer-build --chown=www-data:www-data /app/public ./public
 COPY --from=composer-build --chown=www-data:www-data /app/storage ./storage

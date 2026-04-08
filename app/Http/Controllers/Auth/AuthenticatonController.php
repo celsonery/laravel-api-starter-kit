@@ -15,7 +15,7 @@ class AuthenticatonController extends Controller
     {
         $user = User::query()->where('email', $request->email)->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (! $user || ! Hash::check($request->password, $user->password)) {
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
@@ -27,7 +27,7 @@ class AuthenticatonController extends Controller
     public function logout(Request $request): JsonResponse
     {
         $user = $request->user();
-        if (!$user->currentAccessToken()->delete()) {
+        if (! $user->currentAccessToken()->delete()) {
             return response()->json(['message' => 'User token not rovoked!'], 401);
         }
 

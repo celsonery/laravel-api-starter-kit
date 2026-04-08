@@ -11,8 +11,8 @@ class RegisterController extends Controller
 {
     public function register(RegisterRequest $request): JsonResponse
     {
-        if (!User::create($request->validated())) {
-//        $user->sendEmailVerificationNotification();
+        if (! User::create($request->validated())) {
+            //        $user->sendEmailVerificationNotification();
             return response()->json(['message' => 'Error creating user!'], 401);
         }
 

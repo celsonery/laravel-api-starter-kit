@@ -1,37 +1,37 @@
 services:
-  app:
-    build:
-      context: .
-      dockerfile: docker/dockerfile.development
-    container_name: app
-    restart: unless-stopped
-    working_dir: /var/www
-    command: php artisan serve --host=0.0.0.0 --port=8000
-    ports:
-      - "8000:8000"
-    volumes:
-      - .:/var/www
-    environment:
-      APP_ENV: local
-      APP_DEBUG: "true"
-      DB_CONNECTION: pgsql
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_DATABASE: ${DB_DATABASE:-laravel}
-      DB_USERNAME: ${DB_USERNAME:-laravel}
-      DB_PASSWORD: ${DB_PASSWORD:-secret}
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      CACHE_DRIVER: redis
-      QUEUE_CONNECTION: redis
-      SESSION_DRIVER: redis
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    networks:
-      - laravel
+#  api:
+#    build:
+#      context: .
+#      dockerfile: docker/dockerfile.development
+#    container_name: api
+#    restart: unless-stopped
+#    working_dir: /var/www
+#    command: php artisan serve --host=0.0.0.0 --port=8000
+#    ports:
+#      - "8000:8000"
+#    volumes:
+#      - .:/var/www
+#    environment:
+#      APP_ENV: local
+#      APP_DEBUG: "true"
+#      DB_CONNECTION: pgsql
+#      DB_HOST: db
+#      DB_PORT: 5432
+#      DB_DATABASE: ${DB_DATABASE:-laravel}
+#      DB_USERNAME: ${DB_USERNAME:-laravel}
+#      DB_PASSWORD: ${DB_PASSWORD:-secret}
+#      REDIS_HOST: redis
+#      REDIS_PORT: 6379
+#      CACHE_DRIVER: redis
+#      QUEUE_CONNECTION: redis
+#      SESSION_DRIVER: redis
+#    depends_on:
+#      db:
+#        condition: service_healthy
+#      redis:
+#        condition: service_healthy
+#    networks:
+#      - sindico-net
 
   db:
     image: postgres:16-alpine
@@ -51,7 +51,7 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - laravel
+      - sindico-net
 
   redis:
     image: redis:7-alpine
@@ -68,37 +68,52 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - laravel
+      - sindico-net
 
-  queue:
-    build:
-      context: .
-      dockerfile: docker/dockerfile.development
-    container_name: queue
-    restart: unless-stopped
-    working_dir: /var/www
-    volumes:
-      - .:/var/www
-    command: php artisan queue:work redis --sleep=3 --tries=3 --max-time=3600 --verbose
-    environment:
-      APP_ENV: local
-      APP_DEBUG: "true"
-      DB_CONNECTION: pgsql
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_DATABASE: ${DB_DATABASE:-laravel}
-      DB_USERNAME: ${DB_USERNAME:-laravel}
-      DB_PASSWORD: ${DB_PASSWORD:-secret}
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      QUEUE_CONNECTION: redis
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    networks:
-      - laravel
+#  queue:
+#    build:
+#      context: .
+#      dockerfile: docker/dockerfile.development
+#    container_name: queue
+#    restart: unless-stopped
+#    working_dir: /var/www
+#    volumes:
+#      - .:/var/www
+#    command: php artisan queue:work redis --sleep=3 --tries=3 --max-time=3600 --verbose
+#    environment:
+#      APP_ENV: local
+#      APP_DEBUG: "true"
+#      DB_CONNECTION: pgsql
+#      DB_HOST: db
+#      DB_PORT: 5432
+#      DB_DATABASE: ${DB_DATABASE:-laravel}
+#      DB_USERNAME: ${DB_USERNAME:-laravel}
+#      DB_PASSWORD: ${DB_PASSWORD:-secret}
+#      REDIS_HOST: redis
+#      REDIS_PORT: 6379
+#      QUEUE_CONNECTION: redis
+#    depends_on:
+#      db:
+#        condition: service_healthy
+#      redis:
+#        condition: service_healthy
+#    networks:
+#      - sindico-net
+#
+#  app:
+#    image: node:current-alpine
+#    container_name: app
+#    restart: unless-stopped
+#    working_dir: /app
+#    command: sh -c "npm install && npm run dev"
+#    ports:
+#      - "5173:5173"
+#    volumes:
+#      - ../app:/app
+#    environment:
+#      VITE_API_URL: http://localhost:8000
+#    networks:
+#      - sindico-net
 
 volumes:
   pgdata:
@@ -107,5 +122,5 @@ volumes:
     driver: local
 
 networks:
-  laravel:
+  sindico-net:
     driver: bridge

@@ -190,5 +190,5 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 80
-      #nodePort: 30501
+      nodePort: 30501
   type: NodePort

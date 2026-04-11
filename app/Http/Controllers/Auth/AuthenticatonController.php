@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -19,9 +20,13 @@ class AuthenticatonController extends Controller
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
-        $user['access_token'] = $user->createToken('access_token')->plainTextToken;
+        $access_token = $user->createToken('access_token')->plainTextToken;
 
-        return response()->json(['user' => $user], 200);
+        return response()->json([
+            'access_token' => $access_token,
+            'token_type' => 'Bearer',
+            'user' => $user
+            ], 200);
     }
 
     public function logout(Request $request): JsonResponse

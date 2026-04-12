@@ -12,7 +12,7 @@ class VerifyEmailRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user() && $this->route('id') === $this->user()->id;
+        return $this->user() && $this->route('id') == $this->user()->id;
     }
 
     /**

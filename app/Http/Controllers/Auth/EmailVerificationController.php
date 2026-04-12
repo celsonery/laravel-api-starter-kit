@@ -28,13 +28,13 @@ class EmailVerificationController extends Controller
             event(new Verified($user));
         }
 
-        return response()->json(['message' => 'Email verified successfully!'], 201);
+        return response()->json(['message' => 'Email verified successfully!']);
     }
 
     public function resend(ResendVerificationEmailRequest $request): JsonResponse
     {
         if ($request->user()->hasVerifiedEmail()) {
-            return response()->json(['message' => 'Email already verified']);
+            return response()->json(['message' => 'Email already verified'], 400);
         }
 
         $request->user()->sendEmailVerificationNotification();

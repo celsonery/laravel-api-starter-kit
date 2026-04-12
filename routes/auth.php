@@ -19,8 +19,9 @@ Route::prefix('auth')->group(function (): void {
     Route::middleware(['auth:sanctum', 'throttle:authenticated', 'verified'])->group(function (): void {
         Route::post('logout', [AuthController::class, 'logout'])->name('logout');
         Route::get('user', [AuthController::class, 'user'])->name('user');
+    });
 
-        // Email verification
+    Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function (): void {
         Route::post('email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
             ->middleware(['signed'])
             ->name('verification.verify');

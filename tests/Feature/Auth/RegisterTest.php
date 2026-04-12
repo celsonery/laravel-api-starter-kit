@@ -12,16 +12,16 @@ describe('Register', function () {
             'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => 'Pass@..w/*123',
-            'password_confirmation' => 'Pass@..w/*123'
+            'password_confirmation' => 'Pass@..w/*123',
         ]);
 
         $response->assertStatus(201)
             ->assertJsonStructure([
-                'message'
+                'message',
             ]);
 
         $this->assertDatabaseHas('users', [
-            'email' => 'test@example.com'
+            'email' => 'test@example.com',
         ]);
     });
 
@@ -30,12 +30,12 @@ describe('Register', function () {
             'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => '12345678',
-            'password_confirmation' => '12345678'
+            'password_confirmation' => '12345678',
         ]);
 
         $response->assertStatus(422)
             ->assertJsonStructure([
-                'message'
+                'message',
             ]);
     });
 
@@ -44,12 +44,12 @@ describe('Register', function () {
             'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => 'abcdefgh',
-            'password_confirmation' => 'abcdefgh'
+            'password_confirmation' => 'abcdefgh',
         ]);
 
         $response->assertStatus(422)
             ->assertJsonStructure([
-                'message'
+                'message',
             ]);
     });
 
@@ -58,12 +58,12 @@ describe('Register', function () {
             'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => 'Password',
-            'password_confirmation' => 'Password'
+            'password_confirmation' => 'Password',
         ]);
 
         $response->assertStatus(422)
             ->assertJsonStructure([
-                'message'
+                'message',
             ]);
     });
 
@@ -72,15 +72,15 @@ describe('Register', function () {
             'name' => '',
             'email' => '',
             'password' => '',
-            'password_confirmation' => ''
+            'password_confirmation' => '',
         ]);
 
         $response->assertStatus(422)
             ->assertJsonStructure([
                 'message',
-                'errors' => ['name', 'email', 'password']
+                'errors' => ['name', 'email', 'password'],
             ])
-            ->assertJsonValidationErrors( ['name', 'email', 'password']);
+            ->assertJsonValidationErrors(['name', 'email', 'password']);
     });
 
     it('fail registration without name', function () {
@@ -88,13 +88,13 @@ describe('Register', function () {
             'name' => '',
             'email' => 'test@example.com',
             'password' => '12345678',
-            'password_confirmation' => '12345678'
+            'password_confirmation' => '12345678',
         ]);
 
         $response->assertStatus(422)
             ->assertJsonStructure([
                 'message',
-                'errors' => ['name']
+                'errors' => ['name'],
             ])
             ->assertJsonValidationErrors(['name']);
     });
@@ -104,13 +104,13 @@ describe('Register', function () {
             'name' => 'test',
             'email' => '',
             'password' => '12345678',
-            'password_confirmation' => '12345678'
+            'password_confirmation' => '12345678',
         ]);
 
         $response->assertStatus(422)
             ->assertJsonStructure([
                 'message',
-                'errors' => ['email']
+                'errors' => ['email'],
             ])
             ->assertJsonValidationErrors(['email']);
     });
@@ -120,13 +120,13 @@ describe('Register', function () {
             'name' => 'test',
             'email' => 'test@',
             'password' => '12345678',
-            'password_confirmation' => '12345678'
+            'password_confirmation' => '12345678',
         ]);
 
         $response->assertStatus(422)
             ->assertJsonStructure([
                 'message',
-                'errors' => ['email']
+                'errors' => ['email'],
             ])
             ->assertJsonValidationErrors(['email']);
     });
@@ -136,13 +136,13 @@ describe('Register', function () {
             'name' => 'test',
             'email' => 'test@example.com',
             'password' => '',
-            'password_confirmation' => '12345678'
+            'password_confirmation' => '12345678',
         ]);
 
         $response->assertStatus(422)
             ->assertJsonStructure([
                 'message',
-                'errors' => ['password']
+                'errors' => ['password'],
             ])
             ->assertJsonValidationErrors(['password']);
     });
@@ -152,13 +152,13 @@ describe('Register', function () {
             'name' => 'test',
             'email' => 'test@example.com',
             'password' => '12345678',
-            'password_confirmation' => ''
+            'password_confirmation' => '',
         ]);
 
         $response->assertStatus(422)
             ->assertJsonStructure([
                 'message',
-                'errors' => ['password']
+                'errors' => ['password'],
             ])
             ->assertJsonValidationErrors(['password']);
     });
@@ -168,13 +168,13 @@ describe('Register', function () {
             'name' => 'test',
             'email' => 'test@example.com',
             'password' => '12345',
-            'password_confirmation' => '12345'
+            'password_confirmation' => '12345',
         ]);
 
         $response->assertStatus(422)
             ->assertJsonStructure([
                 'message',
-                'errors' => ['password']
+                'errors' => ['password'],
             ])
             ->assertJsonValidationErrors(['password']);
     });
@@ -186,13 +186,13 @@ describe('Register', function () {
             'name' => $name,
             'email' => 'test@example.com',
             'password' => '12345678',
-            'password_confirmation' => '12345678'
+            'password_confirmation' => '12345678',
         ]);
 
         $response->assertStatus(422)
             ->assertJsonStructure([
                 'message',
-                'errors' => ['name']
+                'errors' => ['name'],
             ])
             ->assertJsonValidationErrors(['name']);
     });
@@ -204,13 +204,13 @@ describe('Register', function () {
             'name' => 'test',
             'email' => 'test@example.com',
             'password' => $pass,
-            'password_confirmation' => $pass
+            'password_confirmation' => $pass,
         ]);
 
         $response->assertStatus(422)
             ->assertJsonStructure([
                 'message',
-                'errors' => ['password']
+                'errors' => ['password'],
             ])
             ->assertJsonValidationErrors(['password']);
     });
@@ -222,7 +222,7 @@ describe('Register', function () {
             'name' => 'test',
             'email' => 'existing@example.com',
             'password' => '12345678',
-            'password_confirmation' => '12345678'
+            'password_confirmation' => '12345678',
         ]);
 
         $response->assertStatus(422);
@@ -233,7 +233,7 @@ describe('Register', function () {
             'name' => 'test',
             'email' => 'existing@example.com',
             'password' => 'password',
-            'password_confirmation' => 'password'
+            'password_confirmation' => 'password',
         ]);
 
         $response->assertStatus(422);

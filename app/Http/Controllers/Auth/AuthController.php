@@ -19,7 +19,7 @@ class AuthController extends Controller
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
-        if (!$user->hasVerifiedEmail()) {
+        if (! $user->hasVerifiedEmail()) {
             return response()->json(['message' => 'Email not verified!'], 403);
         }
 
@@ -32,7 +32,7 @@ class AuthController extends Controller
             'access_token' => $access_token,
             'token_type' => 'Bearer',
             'user' => $user->only(['id', 'name', 'email', 'email_verified_at', 'created_at']),
-            ]);
+        ]);
     }
 
     public function logout(Request $request): JsonResponse

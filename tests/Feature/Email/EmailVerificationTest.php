@@ -19,7 +19,7 @@ describe('Email Verification', function () {
             ['id' => $user->id, 'hash' => sha1($user->getEmailForVerification())]
         );
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)
+        $response = $this->withHeader('Authorization', 'Bearer '.$token)
             ->postJson($verificationUrl);
 
         $response->assertStatus(200)
@@ -31,7 +31,7 @@ describe('Email Verification', function () {
 
     it('retuns success if email is already verified', function () {
         $user = User::factory()->create([
-            'email_verified_at' => now()
+            'email_verified_at' => now(),
         ]);
         $token = $user->createToken('test-token')->plainTextToken;
 
@@ -41,7 +41,7 @@ describe('Email Verification', function () {
             ['id' => $user->id, 'hash' => sha1($user->getEmailForVerification())]
         );
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)
+        $response = $this->withHeader('Authorization', 'Bearer '.$token)
             ->postJson($verificationUrl);
 
         $response->assertStatus(200)

@@ -11,12 +11,12 @@ describe('Reset Password', function () {
             'email' => $user->email,
             'token' => $token,
             'password' => 'newPassword123',
-            'password_confirmation' => 'newPassword123'
+            'password_confirmation' => 'newPassword123',
         ]);
 
         $response->assertStatus(200)
             ->assertJsonStructure([
-                'message'
+                'message',
             ]);
 
         $this->assertTrue(Hash::check('newPassword123', $user->fresh()->password));
@@ -31,12 +31,12 @@ describe('Reset Password', function () {
             'email' => $user->email,
             'token' => 'invalid-token',
             'password' => '12345678',
-            'password_confirmation' => '12345678'
+            'password_confirmation' => '12345678',
         ]);
 
         $response->assertStatus(422)
             ->assertJsonStructure([
-                'message'
+                'message',
             ]);
     });
 
@@ -48,7 +48,7 @@ describe('Reset Password', function () {
             'email' => $user->email,
             'token' => $token,
             'password' => '12345678',
-            'password_confirmation' => '87654321'
+            'password_confirmation' => '87654321',
         ]);
 
         $response->assertStatus(422);
@@ -59,7 +59,7 @@ describe('Reset Password', function () {
             'email' => 'nonexistent@example.com',
             'token' => 'some-token',
             'password' => '12345678',
-            'password_confirmation' => '12345678'
+            'password_confirmation' => '12345678',
         ]);
 
         $response->assertStatus(422)

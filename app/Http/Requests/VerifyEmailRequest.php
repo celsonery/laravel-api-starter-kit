@@ -4,16 +4,15 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Password;
 
-class LoginRequest extends FormRequest
+class VerifyEmailRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return $this->user() && $this->route('id') === $this->user()->id;
     }
 
     /**
@@ -23,10 +22,6 @@ class LoginRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'email' => ['required', 'string', 'email', 'max:255'],
-            'password' => ['required', Password::default()],
-            'device_name' => ['nullable', 'string', 'max:100']
-        ];
+        return [];
     }
 }

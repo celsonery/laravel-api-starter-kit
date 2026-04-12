@@ -7,18 +7,18 @@ describe('Forgot Password', function () {
         $user = User::factory()->create();
 
         $response = $this->postJson('/api/v1/auth/forgot-password', [
-            'email' => $user->email
+            'email' => $user->email,
         ]);
 
         $response->assertStatus(200)
             ->assertJsonStructure([
-                'message'
+                'message',
             ]);
     });
 
     it('fails with non-existent email', function () {
         $response = $this->postJson('/api/v1/auth/forgot-password', [
-            'email' => 'nonexistent@example.com'
+            'email' => 'nonexistent@example.com',
         ]);
 
         $response->assertStatus(200);
@@ -29,7 +29,7 @@ describe('Forgot Password', function () {
 
         for ($i = 0; $i < 7; $i++) {
             $response = $this->postJson('/api/v1/auth/forgot-password', [
-                'email' => $user->email
+                'email' => $user->email,
             ]);
         }
 

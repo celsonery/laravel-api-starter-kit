@@ -27,7 +27,7 @@ class PasswordController extends Controller
         $status = Password::reset($request->only('email', 'password', 'password_confirmation', 'token'), function (User $user, string $password) {
             $user->forceFill([
                 'password' => Hash::make($password),
-                'remember_token' => Str::random(60)
+                'remember_token' => Str::random(60),
             ])->save();
 
             $user->tokens()->delete();
@@ -37,7 +37,7 @@ class PasswordController extends Controller
 
         if ($status !== Password::PASSWORD_RESET) {
             throw ValidationException::withMessages([
-                'email' => [__($status)]
+                'email' => [__($status)],
             ]);
         }
 

@@ -33,10 +33,10 @@ class ResetPasswordNotification extends Notification implements ShouldQueue
     {
         $frontend = rtrim(config('app.frontend_url', env('FRONTEND_URL', 'http://localhost:3000')), '/');
 
-        return $frontend . '/auth/reset-password?' . http_build_query([
-                'token' => $this->token,
-                'email' => $notifiable->getEmailForPasswordReset(),
-            ]);
+        return $frontend.'/auth/reset-password?'.http_build_query([
+            'token' => $this->token,
+            'email' => $notifiable->getEmailForPasswordReset(),
+        ]);
     }
 
     /**
@@ -48,12 +48,13 @@ class ResetPasswordNotification extends Notification implements ShouldQueue
 
         return (new MailMessage)
             ->subject('Redefinição de senha')
-            ->greeting('Olá, ' . $notifiable->name . '!')
+            ->greeting('Olá, '.$notifiable->name.'!')
             ->line('Recebemos uma solicitação para redefinir a senha da sua conta.')
             ->action('Redefinir Senha', $url)
-            ->line('Este link expirará em ' . config('auth.passwords.users.expire', 60) . ' minutos.')
+            ->line('Este link expirará em '.config('auth.passwords.users.expire', 60).' minutos.')
             ->line('Se você não solicitou a redefinição, ignore este e-mail — sua senha permanece inalterada.')
-            ->salutation('Atenciosamente, ' . config('app.name'));    }
+            ->salutation('Atenciosamente, '.config('app.name'));
+    }
 
     /**
      * Get the array representation of the notification.

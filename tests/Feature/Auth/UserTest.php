@@ -10,12 +10,12 @@ describe('User', function () {
         $user = User::factory()->create();
         $token = $user->createToken('test-token')->plainTextToken;
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)
+        $response = $this->withHeader('Authorization', 'Bearer '.$token)
             ->getJson('/api/v1/auth/user');
 
         $response->assertStatus(200)
             ->assertJsonStructure([
-                'user' => ['id', 'name', 'email', 'email_verified_at', 'created_at']
+                'user' => ['id', 'name', 'email', 'email_verified_at', 'created_at'],
             ])
             ->assertJson([
                 'user' => [
@@ -23,8 +23,8 @@ describe('User', function () {
                     'name' => $user->name,
                     'email' => $user->email,
                     'email_verified_at' => $user->email_verified_at->toISOString(),
-                    'created_at' => $user->created_at->toISOString()
-                ]
+                    'created_at' => $user->created_at->toISOString(),
+                ],
             ]);
     });
 

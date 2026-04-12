@@ -7,7 +7,6 @@ use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
@@ -15,7 +14,7 @@ class RegisterController extends Controller
     {
         $user = User::create($request->validated());
 
-        if (!$user) {
+        if (! $user) {
             return response()->json(['message' => 'Error creating user!'], 401);
         }
 

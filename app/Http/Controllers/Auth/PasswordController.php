@@ -19,6 +19,8 @@ class PasswordController extends Controller
     {
         Password::sendResetLink($request->only('email'));
 
+        logs()->debug($request->only('email'));
+
         return response()->json(['message' => 'You will receive a recovery password link in your email.']);
     }
 

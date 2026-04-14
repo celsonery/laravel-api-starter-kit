@@ -15,11 +15,11 @@ class RegisterController extends Controller
         $user = User::create($request->validated());
 
         if (! $user) {
-            return response()->json(['message' => 'Error creating user!'], 401);
+            return response()->json(['message' => __('app.user_created_error')], 401);
         }
 
         event(new Registered($user));
 
-        return response()->json(['message' => 'User created successfully!'], 201);
+        return response()->json(['message' => __('app.user_created_success')], 201);
     }
 }

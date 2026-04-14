@@ -17,28 +17,28 @@ class EmailVerificationController extends Controller
 
         // Checa se o hash bate com o e-mail do usuário
         if (! hash_equals(sha1($user->getEmailForVerification()), $hash)) {
-            return response()->json(['message' => 'Verification link invalid.'], 403);
+            return response()->json(['message' => __('app.verification_link_invalid')], 403);
         }
 
         if ($user->hasVerifiedEmail()) {
-            return response()->json(['message' => 'Email already verified!']);
+            return response()->json(['message' => __('app.email_already_verified')]);
         }
 
         if ($user->markEmailAsVerified()) {
             event(new Verified($user));
         }
 
-        return response()->json(['message' => 'Email verified successfully!']);
+        return response()->json(['message' => __('app.email_verified_success')]);
     }
 
     public function resend(ResendVerificationEmailRequest $request): JsonResponse
     {
         if ($request->user()->hasVerifiedEmail()) {
-            return response()->json(['message' => 'Email already verified'], 400);
+            return response()->json(['message' => __('app.email_already_verified')], 400);
         }
 
         $request->user()->sendEmailVerificationNotification();
 
-        return response()->json(['message' => 'Verification email resent successfully!']);
+        return response()->json(['message' => __('app.email_resend')]);
     }
 }

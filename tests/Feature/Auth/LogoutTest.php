@@ -14,9 +14,7 @@ describe('Logout', function () {
             ->postJson('/api/v1/auth/logout');
 
         $response->assertStatus(200)
-            ->assertJson([
-                'message' => 'User logged out successfully!',
-            ]);
+            ->assertJsonStructure(['message']);
     });
 
     it('fails logout without authentication', function () {

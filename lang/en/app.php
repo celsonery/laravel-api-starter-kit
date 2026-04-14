@@ -20,5 +20,5 @@ return [
     // Create user
     'user_created_error' => 'Error creating user.',
     'user_created_success' => 'Usuer create successfully.',
-    
+
 ];

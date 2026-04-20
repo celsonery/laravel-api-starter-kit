@@ -19,7 +19,9 @@ class PasswordController extends Controller
     {
         Password::sendResetLink($request->only('email'));
 
-        return response()->json(['message' => 'You will receive a recovery password link in your email.']);
+        logs()->debug($request->only('email'));
+
+        return response()->json(['message' => __('app.forgot_password')]);
     }
 
     public function resetPassword(ResetPasswordRequest $request): JsonResponse
@@ -41,6 +43,6 @@ class PasswordController extends Controller
             ]);
         }
 
-        return response()->json(['message' => 'Password reset successfully.']);
+        return response()->json(['message' => __('app.reset_password')]);
     }
 }

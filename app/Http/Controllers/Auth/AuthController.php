@@ -16,11 +16,11 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (! $user || ! Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
+            return response()->json(['message' => __('app.invalid_credentials')], 401);
         }
 
         if (! $user->hasVerifiedEmail()) {
-            return response()->json(['message' => 'Email not verified!'], 403);
+            return response()->json(['message' => __('app.email_not_verified')], 403);
         }
 
         $deviceName = $request->device_name ?? 'api';
@@ -39,10 +39,10 @@ class AuthController extends Controller
     {
         $user = $request->user();
         if (! $user->currentAccessToken()->delete()) {
-            return response()->json(['message' => 'User token not revoked!'], 403);
+            return response()->json(['message' => __('app.token_not_revoked')], 403);
         }
 
-        return response()->json(['message' => 'User logged out successfully!']);
+        return response()->json(['message' => __('app.user_logged_out')]);
     }
 
     public function user(Request $request): JsonResponse

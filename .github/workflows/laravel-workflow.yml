@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-version: ['8.4', '8.5']
+        php-version: ['8.3', '8.4', '8.5']
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -142,5 +142,5 @@ jobs:
           
           echo "Efetuando deploy na branch ${{ github.ref_name }} no namespace $NAMESPACE"
           
-          kubectl -n $NAMESPACE set image deployment/${{ env.IMAGE_NAME }} \
-            ${{ env.IMAGE_NAME }}=${{ secrets.REGISTRY }}/${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          # kubectl -n $NAMESPACE set image deployment/${{ env.IMAGE_NAME }} \
+            # ${{ env.IMAGE_NAME }}=${{ secrets.REGISTRY }}/${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}

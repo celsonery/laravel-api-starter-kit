@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('sorteios', function (Blueprint $table) {
             $table->id();
-            $table->integer("number");
-            $table->date("data");
-            $table->integer("n1");
-            $table->integer("n2");
-            $table->integer("n3");
-            $table->integer("n4");
-            $table->integer("n5");
-            $table->integer("n6");
+            $table->integer('number');
+            $table->date('data');
+            $table->integer('n1');
+            $table->integer('n2');
+            $table->integer('n3');
+            $table->integer('n4');
+            $table->integer('n5');
+            $table->integer('n6');
             $table->timestamps();
         });
     }

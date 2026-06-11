@@ -19,7 +19,7 @@ describe('Email Verification', function () {
             ['id' => $user->id, 'hash' => sha1($user->getEmailForVerification())]
         );
 
-        $response = $this->withHeader('Authorization', 'Bearer '.$token)
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)
             ->postJson($verificationUrl);
 
         $response->assertStatus(200)
@@ -41,7 +41,7 @@ describe('Email Verification', function () {
             ['id' => $user->id, 'hash' => sha1($user->getEmailForVerification())]
         );
 
-        $response = $this->withHeader('Authorization', 'Bearer '.$token)
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)
             ->postJson($verificationUrl);
 
         $response->assertStatus(200)
@@ -67,7 +67,7 @@ describe('Email Verification', function () {
         $token = $user->createToken('test-token')->plainTextToken;
 
         // Invalid URL without signature
-        $response = $this->withHeader('Authorization', 'Bearer '.$token)
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)
             ->postJson(sprintf('/api/v1/auth/email/verify/%d/invalid-hash', $user->id));
 
         $response->assertStatus(403);
@@ -79,7 +79,7 @@ describe('Resend Verification Email', function () {
         $user = User::factory()->create(['email_verified_at' => null]);
         $token = $user->createToken('test-token')->plainTextToken;
 
-        $response = $this->withHeader('Authorization', 'Bearer '.$token)
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)
             ->postJson('/api/v1/auth/email/resend', [
                 'email' => $user->email,
             ]);
@@ -94,7 +94,7 @@ describe('Resend Verification Email', function () {
         ]);
         $token = $user->createToken('test-token')->plainTextToken;
 
-        $response = $this->withHeader('Authorization', 'Bearer '.$token)
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)
             ->postJson('/api/v1/auth/email/resend', [
                 'email' => $user->email,
             ]);
@@ -107,7 +107,7 @@ describe('Resend Verification Email', function () {
         $user = User::factory()->create();
         $token = $user->createToken('test-token')->plainTextToken;
 
-        $response = $this->withHeader('Authorization', 'Bearer '.$token)
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)
             ->postJson('/api/v1/auth/email/resend', [
                 'email' => 'nonexistent@example.com',
             ]);
@@ -131,7 +131,7 @@ describe('Resend Verification Email', function () {
 
         // Make 7 requests (limit is 6 per minute)
         for ($i = 0; $i < 7; $i++) {
-            $response = $this->withHeader('Authorization', 'Bearer '.$token)
+            $response = $this->withHeader('Authorization', 'Bearer ' . $token)
                 ->postJson('/api/v1/auth/email/resend', [
                     'email' => $user->email,
                 ]);

@@ -25,7 +25,7 @@ class StoreJogoRequest extends FormRequest
         return [
             'jogo' => ['required', 'integer'],
             'numbers' => ['required', 'array', 'min:6', 'max:12'],
-            'numbers.*' => ['required', 'integer', 'between:1,60', 'distinct']
+            'numbers.*' => ['required', 'integer', 'between:1,60', 'distinct'],
         ];
     }
 }

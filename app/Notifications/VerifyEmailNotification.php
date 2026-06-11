@@ -47,7 +47,7 @@ class VerifyEmailNotification extends Notification implements ShouldQueue
 
         $frontendUrl = rtrim(config('app.frontend_url', env('FRONTEND_URL', 'http://localhost:3000')), '/');
 
-        return $frontendUrl.'/auth/verify-email?'.
+        return $frontendUrl . '/auth/verify-email?' .
             http_build_query([
                 'id' => $id,
                 'hash' => $hash,
@@ -65,12 +65,12 @@ class VerifyEmailNotification extends Notification implements ShouldQueue
 
         return (new MailMessage)
             ->subject('Verifique seu endereço de e-mail')
-            ->greeting('Olá, '.$notifiable->name.'!')
+            ->greeting('Olá, ' . $notifiable->name . '!')
             ->line('Clique no botão abaixo para verificar seu e-mail e ativar sua conta.')
             ->action('Verificar E-mail', $url)
             ->line('Este link expirará em 60 minutos.')
             ->line('Se você não criou esta conta, ignore este e-mail.')
-            ->salutation('Atenciosamente, '.config('app.name'));
+            ->salutation('Atenciosamente, ' . config('app.name'));
     }
 
     /**

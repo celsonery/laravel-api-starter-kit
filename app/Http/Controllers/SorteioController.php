@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Estatistica;
 use App\Models\Sorteio;
-use Illuminate\Support\Facades\DB;
 
 class SorteioController extends Controller
 {
@@ -29,6 +28,4 @@ class SorteioController extends Controller
 
         return response()->json(['numbers' => $numbers]);
     }
-
-
 }

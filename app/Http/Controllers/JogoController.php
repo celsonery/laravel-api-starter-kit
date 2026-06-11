@@ -67,7 +67,7 @@ class JogoController extends Controller
         foreach ($resultados as $resultado) {
             Sorteio::updateOrCreate(
                 [
-                    'number' => $resultado['concurso']
+                    'number' => $resultado['concurso'],
                 ],
                 [
                     'data' => $resultado['data'],
@@ -76,8 +76,8 @@ class JogoController extends Controller
                     'n3' => $resultado['dezenas'][2],
                     'n4' => $resultado['dezenas'][3],
                     'n5' => $resultado['dezenas'][4],
-                    'n6' => $resultado['dezenas'][5]
-            ]);
+                    'n6' => $resultado['dezenas'][5],
+                ]);
         }
         dd($resultados[0]);
     }

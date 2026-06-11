@@ -10,7 +10,7 @@ describe('User', function () {
         $user = User::factory()->create();
         $token = $user->createToken('test-token')->plainTextToken;
 
-        $response = $this->withHeader('Authorization', 'Bearer '.$token)
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)
             ->getJson('/api/v1/auth/user');
 
         $response->assertStatus(200)

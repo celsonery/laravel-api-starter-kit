@@ -7,6 +7,6 @@ Route::prefix('v1')->group(function () {
         return response()->json(['message' => 'Api running']);
     });
 
-    require __DIR__.'/auth.php';
-    require __DIR__.'/api/jogo.php';
+    require __DIR__ . '/auth.php';
+    require __DIR__ . '/api/jogo.php';
 });

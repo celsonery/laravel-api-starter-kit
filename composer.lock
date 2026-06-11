@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3bae2ada5df76faaf3c5da553b6c048c",
+    "content-hash": "d754c3a3885135738d4d014e795b22c7",
     "packages": [
         {
             "name": "brick/math",
@@ -134,6 +134,83 @@
                 }
             ],
             "time": "2024-02-09T16:56:22+00:00"
+        },
+        {
+            "name": "celsonery/laravel-loterias-api",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/celsonery/laravel-loterias-api.git",
+                "reference": "a8436ead3a9e2750e49fc062903a2f7e5d2f22b2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/celsonery/laravel-loterias-api/zipball/a8436ead3a9e2750e49fc062903a2f7e5d2f22b2",
+                "reference": "a8436ead3a9e2750e49fc062903a2f7e5d2f22b2",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/http": "^12.0|^13.0",
+                "illuminate/support": "^12.0|^13.0",
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.29",
+                "orchestra/testbench": "^11.1",
+                "pestphp/pest": "^4.6",
+                "pestphp/pest-plugin-laravel": "^4.1"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "BrasilApi": "CelsoNery\\LoteriasApi\\Facades\\LoteriasApi"
+                    },
+                    "providers": [
+                        "CelsoNery\\LoteriasApi\\Providers\\LoteriasApiServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "CelsoNery\\LoteriasApi\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Celso Nery",
+                    "email": "celso.nery@gmail.com",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "A little Laravel package for integration with Loterias Api.",
+            "homepage": "https://github.com/celsonery/laravel-loterias-api",
+            "keywords": [
+                "caixa",
+                "celsonery",
+                "diadesorte",
+                "duplasena",
+                "federal",
+                "laravel",
+                "laravel-loterias-api",
+                "loterias",
+                "lotofacil",
+                "lotomania",
+                "maismilionaria",
+                "megasena",
+                "quina",
+                "supersete",
+                "timemania"
+            ],
+            "support": {
+                "issues": "https://github.com/celsonery/laravel-loterias-api/issues",
+                "source": "https://github.com/celsonery/laravel-loterias-api"
+            },
+            "time": "2026-06-10T21:52:33+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
